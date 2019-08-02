@@ -2,5 +2,3 @@ venv
 
 etc/config.ini
 arcentpy/client_test.py
-
-__pycache__
