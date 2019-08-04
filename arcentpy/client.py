@@ -30,6 +30,8 @@ class ArcentpyClient():
 		"""
 		return requests.get(endpoint,headers=headers).json()
 
+
+
 	def list_docs(self):
 		"""Returns a list of all documents in the Arcentry account"""
 		endpoint = f'{self.endpoint_base}doc/'
@@ -42,5 +44,17 @@ class ArcentpyClient():
 
 	def list_objects(self,doc_id):
 		"""Lists the id and type of all objects for a given document."""
-		endpoint = f'{self.endpoint_base}doc/{doc_id}'
+		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/'
 		return self.__get_request(endpoint, self.header_base)
+
+	def describe_objects(self,doc_id):
+		"""List all objects and their properties for a given document."""
+		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/all'
+		return self.__get_request(endpoint, self.header_base)
+
+	def describe_object(self,doc_id, obj_id):
+		"""Describe all data for a given object in a given document"""
+		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/{obj_id}'
+		return self.__get_request(endpoint, self.header_base)
+
+	# TODO: Revieve object by metadata selector
