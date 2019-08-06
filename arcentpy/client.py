@@ -1,5 +1,6 @@
 import requests
 import configparser
+import json
 
 # TODO: Offload the API Key to a config file so
 # that is does not have to be explicity passed in
@@ -18,6 +19,8 @@ class ArcentpyClient():
 		self.endpoint_base = f'https://arcentry.com/api/v1/'
 		self.header_base = {f'Authorization': f'Bearer {self.key}'}
 
+	# Helper Methods
+
 	def __get_request(self, endpoint, headers):
 		"""Helper function for sending request to the Arcentry API
 
@@ -30,7 +33,20 @@ class ArcentpyClient():
 		"""
 		return requests.get(endpoint,headers=headers).json()
 
+	def __post_request(self, endpoint, headers, data=None):
+		"""Helper function for sending request to the Arcentry API
 
+			:param endpoint: The complete endpoint for the Arcetry REST resource
+			:type: str
+			:param headers: A dictionary of key/value HTTP header pairs
+			:type: dict
+			:return: Returns a response from the Arcentry API
+			:rtype: Requests Response object
+		"""
+		headers.update({f'Content-Type': f'application/json'})
+		return requests.post(endpoint, data, headers=headers).json()
+
+	# Get Methods
 
 	def list_docs(self):
 		"""Returns a list of all documents in the Arcentry account"""
@@ -58,3 +74,15 @@ class ArcentpyClient():
 		return self.__get_request(endpoint, self.header_base)
 
 	# TODO: Revieve object by metadata selector
+
+	# Post Methods
+
+	def put_object(self,doc_id, obj_type, props={}, ):
+		"""Lists the id and type of all objects for a given document."""
+		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/'
+		data = {
+			"type": obj_type,
+			"props": props
+		}
+		data = json.dumps(data)
+		return self.__post_request(endpoint, self.header_base, data)
