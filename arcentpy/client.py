@@ -4,9 +4,6 @@ import json
 
 from model import Selector
 
-# TODO: Offload the API Key to a config file so
-# that is does not have to be explicity passed in
-# in the client creation.
 class ArcentpyClient():
 	"""Client for interacting with Arcentry."""
 	def __init__(self):
@@ -50,7 +47,7 @@ class ArcentpyClient():
 
 	def __create_selector(self, key, operator, value):
 		selector = Selector(key, operator, value)
-		return selector.selector
+		return selector
 
 	# Get Methods
 
@@ -79,9 +76,12 @@ class ArcentpyClient():
 		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/{obj_id}'
 		return self.__get_request(endpoint, self.header_base)
 
-	def list_by_selector(self, doc_id, selector):
+	def list_by_selector(self, doc_id, key, operator, value):
 		"""List all objects that match the given selector"""
-		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/where/{selector}'
+		selector_obj = self.__create_selector(key, operator, value)
+		selector_obj.set_selector()
+		selector_str = selector_obj.selector
+		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/where/{selector_str}'
 		return self.__get_request(endpoint, self.header_base)
 
 	# Post Methods

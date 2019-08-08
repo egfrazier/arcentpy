@@ -7,8 +7,6 @@ class Selector():
 
 	def set_selector(self):
 		self.selector = str([self.key, self.operator, self.value])
-
-	def url_encode_selector(self):
 		self.selector = self.selector.replace(f' ', f'')
 		self.selector = self.selector.replace(f'[', f'%5B')
 		self.selector = self.selector.replace(f']', f'%5D')
