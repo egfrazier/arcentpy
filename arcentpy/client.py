@@ -2,6 +2,8 @@ import requests
 import configparser
 import json
 
+from model import Selector
+
 # TODO: Offload the API Key to a config file so
 # that is does not have to be explicity passed in
 # in the client creation.
@@ -46,6 +48,10 @@ class ArcentpyClient():
 		headers.update({f'Content-Type': f'application/json'})
 		return requests.post(endpoint, data, headers=headers).json()
 
+	def __create_selector(self, key, operator, value):
+		selector = Selector(key, operator, value)
+		return selector.selector
+
 	# Get Methods
 
 	def list_docs(self):
@@ -73,7 +79,10 @@ class ArcentpyClient():
 		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/{obj_id}'
 		return self.__get_request(endpoint, self.header_base)
 
-	# TODO: Revieve object by metadata selector
+	def list_by_selector(self, doc_id, selector):
+		"""List all objects that match the given selector"""
+		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/where/{selector}'
+		return self.__get_request(endpoint, self.header_base)
 
 	# Post Methods
 
