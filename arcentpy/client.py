@@ -2,9 +2,8 @@ import requests
 import configparser
 import json
 
-# TODO: Offload the API Key to a config file so
-# that is does not have to be explicity passed in
-# in the client creation.
+from model import Selector
+
 class ArcentpyClient():
 	"""Client for interacting with Arcentry."""
 	def __init__(self):
@@ -46,6 +45,10 @@ class ArcentpyClient():
 		headers.update({f'Content-Type': f'application/json'})
 		return requests.post(endpoint, data, headers=headers).json()
 
+	def __create_selector(self, key, operator, value):
+		selector = Selector(key, operator, value)
+		return selector
+
 	# Get Methods
 
 	def list_docs(self):
@@ -73,7 +76,13 @@ class ArcentpyClient():
 		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/{obj_id}'
 		return self.__get_request(endpoint, self.header_base)
 
-	# TODO: Revieve object by metadata selector
+	def list_by_selector(self, doc_id, key, operator, value):
+		"""List all objects that match the given selector"""
+		selector_obj = self.__create_selector(key, operator, value)
+		selector_obj.set_selector()
+		selector_str = selector_obj.selector
+		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/where/{selector_str}'
+		return self.__get_request(endpoint, self.header_base)
 
 	# Post Methods
 
@@ -87,12 +96,18 @@ class ArcentpyClient():
 		data = json.dumps(data)
 		return self.__post_request(endpoint, self.header_base, data)
 
-	def update_object(self,doc_id, obj_type, obj_id, props={}, ):
+	def update_object(self,doc_id, obj_id, props):
 		"""Updates one or more properties for an object."""
 		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/{obj_id}'
 		data = {
-			"type": obj_type,
 			"props": props
 		}
 		data = json.dumps(data)
 		return self.__post_request(endpoint, self.header_base, data)
+
+	def delete_object(self,doc_id, obj_id):
+		"""Deletes an object from the document given its object ID"""
+		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/{obj_id}/delete'
+		return self.__post_request(endpoint, self.header_base)
+
+	# TODO: Bulk Delete
