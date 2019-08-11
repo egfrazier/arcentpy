@@ -96,12 +96,18 @@ class ArcentpyClient():
 		data = json.dumps(data)
 		return self.__post_request(endpoint, self.header_base, data)
 
-	def update_object(self,doc_id, obj_type, obj_id, props={}, ):
+	def update_object(self,doc_id, obj_id, props):
 		"""Updates one or more properties for an object."""
 		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/{obj_id}'
 		data = {
-			"type": obj_type,
 			"props": props
 		}
 		data = json.dumps(data)
 		return self.__post_request(endpoint, self.header_base, data)
+
+	def delete_object(self,doc_id, obj_id):
+		"""Deletes an object from the document given its object ID"""
+		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/{obj_id}/delete'
+		return self.__post_request(endpoint, self.header_base)
+
+	# TODO: Bulk Delete
