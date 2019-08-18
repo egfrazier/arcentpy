@@ -86,6 +86,15 @@ class ArcentpyClient():
 
 	# Post Methods
 
+	def empty_doc(self,doc_id):
+		"""Deletes all objects from a given document"""
+		endpoint = f'{self.endpoint_base}doc/empty'
+		data = {
+			"docId": doc_id
+		}
+		data = json.dumps(data)
+		return self.__get_request(endpoint, self.header_base)
+
 	def put_object(self,doc_id, obj_type, props={}, ):
 		"""Lists the id and type of all objects for a given document."""
 		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/'
