@@ -49,7 +49,7 @@ class ArcentpyClient():
 		selector = Selector(key, operator, value)
 		return selector
 
-	# Get Methods
+	# Document Methods
 
 	def list_docs(self):
 		"""Returns a list of all documents in the Arcentry account"""
@@ -60,6 +60,17 @@ class ArcentpyClient():
 		"""Returns user, folder creation and change dates on a given document."""
 		endpoint = f'{self.endpoint_base}doc/{doc_id}'
 		return self.__get_request(endpoint, self.header_base)
+
+	def empty_doc(self,doc_id):
+		"""Deletes all objects from a given document"""
+		endpoint = f'{self.endpoint_base}doc/empty'
+		data = {
+			"docId": doc_id
+		}
+		data = json.dumps(data)
+		return self.__get_request(endpoint, self.header_base)
+
+	# Object Methods
 
 	def list_objects(self,doc_id):
 		"""Lists the id and type of all objects for a given document."""
@@ -82,17 +93,6 @@ class ArcentpyClient():
 		selector_obj.set_selector()
 		selector_str = selector_obj.selector
 		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/where/{selector_str}'
-		return self.__get_request(endpoint, self.header_base)
-
-	# Post Methods
-
-	def empty_doc(self,doc_id):
-		"""Deletes all objects from a given document"""
-		endpoint = f'{self.endpoint_base}doc/empty'
-		data = {
-			"docId": doc_id
-		}
-		data = json.dumps(data)
 		return self.__get_request(endpoint, self.header_base)
 
 	def put_object(self,doc_id, obj_type, props={}, ):
