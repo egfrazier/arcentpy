@@ -49,17 +49,77 @@ class ArcentpyClient():
 		selector = Selector(key, operator, value)
 		return selector
 
-	# Get Methods
+	# Document Methods
 
 	def list_docs(self):
 		"""Returns a list of all documents in the Arcentry account"""
 		endpoint = f'{self.endpoint_base}doc/'
 		return self.__get_request(endpoint, self.header_base)
 
+	def create_doc(self, title):
+		"""Creates a new document"""
+		endpoint = f'{self.endpoint_base}doc/create'
+		data = {
+			"title": title
+		}
+		data = json.dumps(data)
+		return self.__post_request(endpoint, self.header_base, data)
+
 	def describe_doc(self, doc_id):
 		"""Returns user, folder creation and change dates on a given document."""
 		endpoint = f'{self.endpoint_base}doc/{doc_id}'
 		return self.__get_request(endpoint, self.header_base)
+
+	def empty_doc(self,doc_id):
+		"""Deletes all objects from a given document"""
+		endpoint = f'{self.endpoint_base}doc/empty'
+		data = {
+			"docId": doc_id
+		}
+		data = json.dumps(data)
+		return self.__post_request(endpoint, self.header_base, data)
+
+	def add_collaborator(self,doc_id,collab_email):
+		"""Add another Arcentry account as a collaborator
+			to a given document"""
+		endpoint = f'{self.endpoint_base}doc/add-collaborator'
+		data = {
+			"docId": doc_id,
+			"email": collab_email
+		}
+		data = json.dumps(data)
+		return self.__post_request(endpoint, self.header_base)
+
+	def update_doc_title(self,doc_id,title):
+		"""Update title of a given document"""
+		endpoint = f'{self.endpoint_base}doc/change-title'
+		data = {
+			"docId": doc_id,
+			"title": title
+		}
+		data = json.dumps(data)
+		return self.__post_request(endpoint, self.header_base, data)
+
+	def clone_doc(self,doc_id,title):
+		"""Clone new document from an existing one"""
+		endpoint = f'{self.endpoint_base}doc/clone'
+		data = {
+			"docId": doc_id,
+			"title": title
+		}
+		data = json.dumps(data)
+		return self.__post_request(endpoint, self.header_base, data)
+
+	def delete_doc(self,doc_id):
+		"""Delete a document with a given ID"""
+		endpoint = f'{self.endpoint_base}doc/delete'
+		data = {
+			"docId": doc_id
+		}
+		data = json.dumps(data)
+		return self.__post_request(endpoint, self.header_base, data)
+
+	# Object Methods
 
 	def list_objects(self,doc_id):
 		"""Lists the id and type of all objects for a given document."""
@@ -83,8 +143,6 @@ class ArcentpyClient():
 		selector_str = selector_obj.selector
 		endpoint = f'{self.endpoint_base}doc/{doc_id}/obj/where/{selector_str}'
 		return self.__get_request(endpoint, self.header_base)
-
-	# Post Methods
 
 	def put_object(self,doc_id, obj_type, props={}, ):
 		"""Lists the id and type of all objects for a given document."""
