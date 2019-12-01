@@ -176,3 +176,69 @@ class ArcentpyClient():
 		return self.__post_request(endpoint, self.header_base)
 
 	# TODO: Bulk Delete
+
+	# Folder Methods
+
+	def create_folder(self, title):
+		"""Creates a new folder"""
+		endpoint = f'{self.endpoint_base}folder/create'
+		data = {
+			"title": title
+		}
+		data = json.dumps(data)
+		return self.__post_request(endpoint, self.header_base, data)
+
+	def list_folders(self):
+		"""Lists all folders"""
+		endpoint = f'{self.endpoint_base}folder/list'
+		return self.__get_request(endpoint, self.header_base)
+
+	def update_folder_title(self, title,folder_id):
+		"""Updates title of folder"""
+		endpoint = f'{self.endpoint_base}folder/change-title'
+		data = {
+			"title": title,
+			"folderId": folder_id
+		}
+		data = json.dumps(data)
+		return self.__post_request(endpoint, self.header_base, data)
+
+	def delete_folder(self, title, folder_id):
+		"""Lists all folders"""
+		endpoint = f'{self.endpoint_base}folder/delete'
+		data = {
+			"title": title,
+			"folderId": folder_id
+		}
+		data = json.dumps(data)
+		return self.__post_request(endpoint, self.header_base, data)
+
+	# Embed Methods
+
+	def create_live_embed(self, doc_id):
+		"""Creates a new live embed"""
+		endpoint = f'{self.endpoint_base}embed/enable-live'
+		data = {
+			"docId": doc_id
+		}
+		data = json.dumps(data)
+		return self.__post_request(endpoint, self.header_base, data)
+
+	def create_static_embed(self, doc_id):
+		"""Creates a new static embed"""
+		endpoint = f'{self.endpoint_base}embed/create-static'
+		data = {
+			"docId": doc_id
+		}
+		data = json.dumps(data)
+		return self.__post_request(endpoint, self.header_base, data)
+
+	def delete_static_embed(self, doc_id):
+		"""Deletes a static embed with a give ID"""
+		endpoint = f'{self.endpoint_base}embed/delete-static'
+		data = {
+			"docId": doc_id
+		}
+		data = json.dumps(data)
+		return self.__post_request(endpoint, self.header_base, data)
+
