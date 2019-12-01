@@ -70,6 +70,13 @@ class ArcentpyClient():
 		endpoint = f'{self.endpoint_base}doc/{doc_id}'
 		return self.__get_request(endpoint, self.header_base)
 
+	def set_doc(self, doc_id, json):
+		"""Sets the contents of a document. NOTE: This will erase
+			the existing contents of the document!"""
+		endpoint = f'{self.endpoint_base}doc/set-content/{doc_id}'
+		data = json.dumps(json)
+		return self.__psot_request(endpoint, self.headers_base, data)
+
 	def empty_doc(self,doc_id):
 		"""Deletes all objects from a given document"""
 		endpoint = f'{self.endpoint_base}doc/empty'
